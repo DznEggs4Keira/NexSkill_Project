@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Car_Controller : MonoBehaviour
 {
-    readonly float engineForce = 100000f;
+    readonly float engineForce = 200000f;
     readonly float maxTurn = 20f;
     float throttle;
     float steering;
@@ -29,7 +29,7 @@ public class Car_Controller : MonoBehaviour
         foreach (GameObject wheel in Steering)
         {
             wheel.GetComponentInChildren<WheelCollider>().steerAngle = maxTurn * steering;
-            wheel.transform.localEulerAngles = new Vector3(0f, wheel.GetComponentInChildren<WheelCollider>().steerAngle, 90);
+            wheel.transform.localEulerAngles = new Vector3(0f, wheel.GetComponentInChildren<WheelCollider>().steerAngle, 90f);
         }
 
         foreach(GameObject rims in Rims)
