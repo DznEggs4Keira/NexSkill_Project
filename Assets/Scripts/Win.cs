@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Win : MonoBehaviour
 {
+    public GameObject winner;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,12 +23,12 @@ public class Win : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             //set particle effect off
-
-            gameObject.SetActive(false);
+            
+            Time.timeScale = 0f;
 
             Debug.Log("YOU WIN");
 
-            Time.timeScale = 0f;
+            winner.SetActive(true);
         }
     }
 }

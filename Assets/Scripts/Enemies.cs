@@ -5,6 +5,7 @@ public class Enemies : MonoBehaviour
 {
     public Transform target;
     public NavMeshAgent Agent;
+    public GameObject GameOverScreen;
 
     readonly private float initSpeed = 3f;
 
@@ -24,12 +25,13 @@ public class Enemies : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Time.timeScale = 0.5f;
+            Time.timeScale = 0f;
             Debug.Log("Hit Player");
 
             Agent.isStopped = true;
 
             // @TODO Game Over Screen
+            GameOverScreen.SetActive(true);
         }
     }
 }
