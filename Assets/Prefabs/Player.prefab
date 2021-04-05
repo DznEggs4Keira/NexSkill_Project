@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cc: {fileID: 6864806990985000704}
   cam: {fileID: 0}
+  anim: {fileID: 7878958899207207105}
   speed: 10
   turnSmoothTime: 0.1
 --- !u!54 &684982819
@@ -163,6 +164,12 @@ PrefabInstance:
 --- !u!4 &7878958899216455339 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400138, guid: 6859598bcb2e3b54ea6b816dc2c736c0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7878958899216584097}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7878958899207207105 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 6859598bcb2e3b54ea6b816dc2c736c0,
     type: 3}
   m_PrefabInstance: {fileID: 7878958899216584097}
   m_PrefabAsset: {fileID: 0}

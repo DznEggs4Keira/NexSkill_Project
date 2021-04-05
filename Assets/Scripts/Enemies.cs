@@ -6,6 +6,7 @@ public class Enemies : MonoBehaviour
     public Transform target;
     public NavMeshAgent Agent;
     public GameObject GameOverScreen;
+    public Animator anim;
 
     readonly private float initSpeed = 3f;
 
@@ -19,6 +20,8 @@ public class Enemies : MonoBehaviour
     void Update()
     {
         Agent.destination = target.position;
+
+        anim.SetFloat("Movement", Agent.velocity.z);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -27,6 +30,8 @@ public class Enemies : MonoBehaviour
         {
             Time.timeScale = 0f;
             Debug.Log("Hit Player");
+
+            anim.SetBool("Hit", true);
 
             Agent.isStopped = true;
 

@@ -4,6 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public CharacterController cc;
     public Transform cam;
+    public Animator anim;
+
     public float speed;
     public float turnSmoothTime = 0.1f;
 
@@ -16,7 +18,10 @@ public class PlayerMovement : MonoBehaviour
         //check for input
         movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")).normalized;
 
-        if(movement.magnitude >= 0.1f)
+        //send animation
+        anim.SetFloat("Movement", movement.z);
+
+        if (movement.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
