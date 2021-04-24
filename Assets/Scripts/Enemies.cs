@@ -8,12 +8,12 @@ public class Enemies : MonoBehaviour
     public GameObject GameOverScreen;
     public Animator anim;
 
-    readonly private float initSpeed = 3f;
+    readonly private float AgentSpeed = 5f;
 
     // Runs at the First Frame
     private void Start()
     {
-        Agent.velocity *= initSpeed;
+        Agent.velocity *= AgentSpeed;
     }
 
     // Update is called once per frame
@@ -21,17 +21,26 @@ public class Enemies : MonoBehaviour
     {
         Agent.destination = target.position;
 
-        anim.SetFloat("Movement", Agent.velocity.z);
+        if(Agent.velocity != Vector3.zero)
+            anim.SetBool("IsMoving", true);
+        else
+            anim.SetBool("IsMoving", false);
+
+        if(GameOverScreen.activeInHierarchy)
+        {
+            Agent.isStopped = true;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Time.timeScale = 0f;
             Debug.Log("Hit Player");
 
-            anim.SetBool("Hit", true);
+            anim.SetTrigger("Hit");
+
+            Time.timeScale = 0.5f;
 
             Agent.isStopped = true;
 
