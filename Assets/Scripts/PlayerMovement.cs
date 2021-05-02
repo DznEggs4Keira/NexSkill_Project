@@ -2,8 +2,110 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController cc;
+    #region PUBLIC FIELDS
+    [Header(header: "Walk / Run Setting")]
+    public float walkSpeed;
+    public float runSpeed;
+
+    [Header(header: "Jump Setting")]
+    public float playerJumpForce;
+    public ForceMode appliedForceMode;
+
+    [Header(header: "Jumping State")]
+    public bool playerIsJumping;
+
+    [Header(header: "Current Player Speed")]
+    public float currentSpeed;
+
+    #endregion
+
+    #region PRIVATE FIELDS
+
+    private float _xAxis;
+    private float _zAxis;
+    private RaycastHit _hit;
+    private Vector3 _groundLocation;
+    private bool _isCapslockPressedDown;
+    private float _turnSmoothTime = 0.1f;
+    private float _turnSmoothVelocity;
+
+
+    [Header(header: "Serialized Fields")]
+    [SerializeField] private FixedJoystick _joystick;
+    [SerializeField] private FixedJoystickButton _joyStickButton;
+    [SerializeField] private Rigidbody _rb;
+    [SerializeField] private Animator _anim;
+
+    #endregion
+
+    #region MONODEVELOP ROUTINES
+
+    private void Start()
+    {
+        #region Initializing Components
+
+        #endregion
+    }
+
+    private void Update()
+    {
+        #region Controller Input
+
+        _xAxis = _joystick.Horizontal;
+        _zAxis = _joystick.Vertical;
+
+        #endregion
+
+        #region Animation Update
+
+        if (_anim != null)
+        {
+            if (new Vector2(_xAxis, _zAxis).magnitude > 0.1f)
+                _anim.SetBool("IsMoving", true);
+            else
+                _anim.SetBool("IsMoving", false);
+        }
+
+        #endregion
+    }
+
+    private void FixedUpdate()
+    {
+        #region Player Movement
+
+        if (new Vector2(_xAxis, _zAxis).magnitude > 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(_xAxis, _zAxis) * Mathf.Rad2Deg; //cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
+
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+        }
+
+        _rb.MovePosition(transform.position + currentSpeed * Time.fixedDeltaTime * 
+            transform.TransformDirection(_xAxis, 0f, _zAxis));
+
+        #endregion
+    }
+
+    #endregion
+
+    #region HELPER ROUTINES
+
+    private void PlayerJump()
+    {
+
+    }
+
+    #endregion
+}
+
+/* public class PlayerMovement : MonoBehaviour
+{
+     public CharacterController cc;
     //public Transform cam;
+    //public Rigidbody rb;
     public Animator anim;
 
     public float speed;
@@ -23,19 +125,20 @@ public class PlayerMovement : MonoBehaviour
     {
         //check for input
         //movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")).normalized;
-        movement = new Vector3(joystick.Horizontal, 0f, joystick.Vertical).normalized;
+        movement = new Vector3(joystick.Vertical, 0f, -joystick.Horizontal);
 
-        Debug.Log("x: " + movement.x + " z: " + movement.z);
-
-        //send animation
-        if(movement != Vector3.zero)
-            anim.SetBool("IsMoving", true);
-        else
-            anim.SetBool("IsMoving", false);
+        if (anim != null)
+        {
+            //send animation
+            if (movement.magnitude >= 0.1f)
+                anim.SetBool("IsMoving", true);
+            else
+                anim.SetBool("IsMoving", false);
+        }
 
         if (movement.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg + movement.sqrMagnitude; //cam.eulerAngles.y;
+            float targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg + movement.magnitude; //cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
 
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
@@ -52,7 +155,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Hit Enemy");
 
-            anim.SetTrigger("Hit");
+            if(anim != null)
+            {
+                anim.SetTrigger("Hit");
+            }
         }
     }
 }
+*/

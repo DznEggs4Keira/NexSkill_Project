@@ -4,17 +4,19 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class FixedJoystickButton : Joystick
+public class FixedJoystickButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     protected bool pressed;
 
-    public override void OnPointerDown(PointerEventData eventData)
+    public bool IsJumping => pressed;
+
+    public void OnPointerDown(PointerEventData eventData)
     {
         pressed = true;
         GetComponent<Image>().color = Color.grey;
     }
 
-    public override void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         pressed = false;
         GetComponent<Image>().color = Color.white;
