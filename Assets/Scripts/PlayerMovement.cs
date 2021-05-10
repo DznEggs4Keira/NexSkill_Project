@@ -75,16 +75,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (new Vector2(_xAxis, _zAxis).magnitude > 0.1f)
         {
-            float targetAngle = Mathf.Atan2(_xAxis, _zAxis) * Mathf.Rad2Deg; //cam.eulerAngles.y;
+            float targetAngle = Mathf.Atan2(_xAxis, _zAxis) * Mathf.Rad2Deg;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
 
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-        }
 
-        _rb.MovePosition(transform.position + currentSpeed * Time.fixedDeltaTime * 
-            transform.TransformDirection(_xAxis, 0f, _zAxis));
+            _rb.MovePosition(transform.position + currentSpeed * Time.fixedDeltaTime *
+            transform.TransformDirection(moveDir));
+        }
 
         #endregion
     }

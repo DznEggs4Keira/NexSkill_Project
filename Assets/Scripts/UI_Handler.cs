@@ -20,4 +20,18 @@ public class UI_Handler : MonoBehaviour
     {
         
     }
+
+    //Main Menu - Play Button
+    public void Play()
+    {
+
+    }
+
+    //Main Menu - Exit Button
+    public void ExitApp()
+    {
+
+    }
+
+    //UI Handler Call Level
 }
