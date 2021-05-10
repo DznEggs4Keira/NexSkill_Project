@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [Header(header: "Current Player Speed")]
     public float currentSpeed;
 
+    [Header(header: "Camera Offset")]
+    public Vector3 Offset;
+
     #endregion
 
     #region PRIVATE FIELDS
@@ -35,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private FixedJoystickButton _joyStickButton;
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private Animator _anim;
+    [SerializeField] private Camera _mainCamera;
 
     #endregion
 
@@ -73,20 +77,33 @@ public class PlayerMovement : MonoBehaviour
     {
         #region Player Movement
 
-        if (new Vector2(_xAxis, _zAxis).magnitude > 0.1f)
+        if (_joystick.Direction.magnitude > 0.1f)
         {
+            //direction the player is moving
+            Vector3 direction = new Vector3(_xAxis, 0f, _zAxis).normalized;
+
+            // this gives us the angle that the player needs to rotate to to face their movement
             float targetAngle = Mathf.Atan2(_xAxis, _zAxis) * Mathf.Rad2Deg;
+
+            // this will allow us to smoothly move from our current rotation to the target rotation
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, _turnSmoothTime);
 
+            //apply the smoothed out rotation to player
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
+            // the player moves in the direction that they are facing
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            _rb.MovePosition(transform.position + currentSpeed * Time.fixedDeltaTime *
-            transform.TransformDirection(moveDir));
+            _rb.MovePosition(transform.position + (moveDir.normalized * currentSpeed * Time.fixedDeltaTime));
         }
 
         #endregion
+    }
+
+    private void LateUpdate()
+    {
+        _mainCamera.transform.position = transform.position + Offset;
+        _mainCamera.transform.rotation = Quaternion.LookRotation(-Offset);
     }
 
     #endregion
