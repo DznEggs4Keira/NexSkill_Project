@@ -5,7 +5,6 @@ public class Enemies : MonoBehaviour
 {
     public Transform target;
     public NavMeshAgent Agent;
-    public GameObject GameOverScreen;
     public Animator anim;
 
     readonly private float AgentSpeed = 5f;
@@ -25,11 +24,6 @@ public class Enemies : MonoBehaviour
             anim.SetBool("IsMoving", true);
         else
             anim.SetBool("IsMoving", false);
-
-        if(GameOverScreen.activeInHierarchy)
-        {
-            Agent.isStopped = true;
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,12 +34,9 @@ public class Enemies : MonoBehaviour
 
             anim.SetTrigger("Hit");
 
-            Time.timeScale = 0.5f;
-
             Agent.isStopped = true;
 
-            // @TODO Game Over Screen
-            GameOverScreen.SetActive(true);
+            Level_Handler.enemyHit = true;
         }
     }
 }
