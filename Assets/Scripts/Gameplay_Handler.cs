@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 //Switches Levels based on Win or lose
 
 // ORDER OF MANAGERS - LEVEL HANDLER > GAMEPLAY MANAGER > UI HANDLER > USER
 
 public class Gameplay_Handler : MonoBehaviour {
     [SerializeField] private Level_Handler[] levels;
-    public static int currentLevelNumber = 1;
 
     #region Singleton
 
@@ -36,6 +34,11 @@ public class Gameplay_Handler : MonoBehaviour {
         set { _levelStatus = value; SendStatus(); }
     }
 
+    private void Start() {
+        Debug.Log(GameConstants.currentLevelNumber);
+        LoadLevel(GameConstants.currentLevelNumber, true);
+    }
+
     //Send Current Level status to UI
     private void SendStatus() {
         switch (_levelStatus) {
@@ -53,9 +56,13 @@ public class Gameplay_Handler : MonoBehaviour {
     //load level
     public void LoadLevel(int level, bool retryLevel = false) {
 
+        if((level - 1) > levels.Length) {
+            Debug.Log("All Levels Completed!");
+            UI_Handler.instance.BackToMain();
+        }
+
         if(retryLevel) {
-            levels[level - 1].gameObject.SetActive(false);
-            levels[level - 1].gameObject.SetActive(true);
+            levels[level-1].gameObject.SetActive(true);
         } else {
             for (int i = 0; i < levels.Length; i++) {
                 if (i == (level - 1)) {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //will handle when to show the Main Menu
 //send a callback to the gameplay manager when to switch levels
@@ -19,9 +20,12 @@ public class UI_Handler : MonoBehaviour {
 
     #endregion
 
+    #region Main Menu Routines
+
     //Main Menu - Play Button
     public void Play() {
-        Gameplay_Handler.instance.LoadLevel(1);
+        GameConstants.currentLevelNumber = 1;
+        SceneManager.LoadScene(1);
     }
 
     //Main Menu - Exit Button
@@ -29,23 +33,30 @@ public class UI_Handler : MonoBehaviour {
         Application.Quit();
     }
 
+    #endregion
+
+    #region Game Menu Routines
+
+    //Back to Main Menu
+    public void BackToMain() {
+        SceneManager.LoadScene(0);
+    }
+
     //UI Handler Call Level
     public void OpenNextLevel() {
-        Gameplay_Handler.instance.LoadLevel(Gameplay_Handler.currentLevelNumber++);
+        Gameplay_Handler.instance.LoadLevel(GameConstants.currentLevelNumber++);
     }
 
     public void RetryLevel() {
-        Gameplay_Handler.instance.LoadLevel(Gameplay_Handler.currentLevelNumber, true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     //UI Handler show Win screen
-    public void CallWin() {
-        Win.SetActive(true);
-    }
+    public void CallWin() { if (Win != null) Win.SetActive(true); }
 
     //UI Handler show Lose screen
-    public void CallLose() {
-        Lose.SetActive(true);
-    }
+    public void CallLose() { if (Lose != null) Lose.SetActive(true); }
+
+    #endregion
 
 }

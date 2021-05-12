@@ -54,7 +54,7 @@ public class Level_Handler : MonoBehaviour {
             enemyHit = !enemyHit;
         }
 
-        if (coinsCollected >= maxCoins /* && enemy did not catch us*/) {
+        if (coinsCollected >= maxCoins) {
             LevelComplete();
         }
     }
