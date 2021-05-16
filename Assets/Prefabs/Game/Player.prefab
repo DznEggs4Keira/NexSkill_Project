@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 366153415}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   appliedForceMode: 0
   playerIsJumping: 0
   currentSpeed: 5
-  Offset: {x: 0, y: 4, z: -15}
+  Offset: {x: 0, y: 4, z: -5}
   _joystick: {fileID: 0}
   _camField: {fileID: 0}
   _joyStickButton: {fileID: 0}
