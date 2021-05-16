@@ -34,7 +34,7 @@ public class Level_Handler : MonoBehaviour {
 
         //for loop to reset enemy position
 
-        player.SetActive(false);
+        //player.SetActive(false);
 
         coinsCollected = 0;
     }
