@@ -9,8 +9,10 @@ public class Enemies : MonoBehaviour
     public NavMeshAgent Agent;
     public Animator anim;
 
-    readonly private float AgentSpeed = 5f;
-    readonly private float AgentMaxSpeed = 20f;
+    readonly private float AgentSpeed = 1.5f;
+    readonly private float AgentMaxSpeed = 10f;
+    readonly private float enemyDamage = 25f;
+    
     private bool isTargetInRange = false;
     private float distance = 100f;
 
@@ -57,9 +59,15 @@ public class Enemies : MonoBehaviour
 
             anim.SetTrigger("Hit");
 
-            Agent.isStopped = true;
+            //Agent.isStopped = true;
+            //Level_Handler.enemyHit = true;
 
-            Level_Handler.enemyHit = true;
+            //Health component to handle damage dealt to player
+            PlayerHealth H = collision.gameObject.GetComponent<PlayerHealth>();
+
+            if (H == null) return;
+
+            H.HealthPoints -= enemyDamage;
         }
     }
 
@@ -86,9 +94,6 @@ public class Enemies : MonoBehaviour
                 isTargetInRange = true;
 
                 Debug.Log("Target found and locked");
-
-                //break out of coroutine
-                yield break;
             } else {
 
                 Debug.Log("Target not found");

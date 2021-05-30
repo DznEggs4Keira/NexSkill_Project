@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 //Switches Levels based on Win or lose
 
@@ -36,7 +34,7 @@ public class Gameplay_Handler : MonoBehaviour {
 
     private void Start() {
         Debug.Log(GameConstants.currentLevelNumber);
-        LoadLevel(GameConstants.currentLevelNumber, true);
+        LoadLevel(GameConstants.currentLevelNumber);
     }
 
     //Send Current Level status to UI
@@ -54,15 +52,11 @@ public class Gameplay_Handler : MonoBehaviour {
     }
 
     //load level
-    public void LoadLevel(int level, bool retryLevel = false) {
+    public void LoadLevel(int level) {
 
-        if((level - 1) > levels.Length) {
+        if(level > levels.Length) {
             Debug.Log("All Levels Completed!");
             UI_Handler.instance.BackToMain();
-        }
-
-        if(retryLevel) {
-            levels[level-1].gameObject.SetActive(true);
         } else {
             for (int i = 0; i < levels.Length; i++) {
                 if (i == (level - 1)) {
