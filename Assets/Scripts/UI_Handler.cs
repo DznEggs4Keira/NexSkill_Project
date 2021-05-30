@@ -57,6 +57,12 @@ public class UI_Handler : MonoBehaviour {
     //UI Handler show Lose screen
     public void CallLose() { if (Lose != null) Lose.SetActive(true); }
 
+    //open a specific level
+    public void OpenLevel(int level) {
+        GameConstants.currentLevelNumber = level;
+        SceneManager.LoadScene(1);
+    }
+
     #endregion
 
 }
