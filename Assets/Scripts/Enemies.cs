@@ -4,23 +4,22 @@ using System.Collections;
 
 public class Enemies : MonoBehaviour
 {
-    public Transform init;
+    public Vector3 initPos;
     public Transform target;
     public NavMeshAgent Agent;
     public Animator anim;
 
-    readonly private float AgentSpeed = 1.5f;
-    readonly private float AgentMaxSpeed = 10f;
     readonly private float enemyDamage = 25f;
     
     private bool isTargetInRange = false;
-    private float distance = 100f;
+    private float radius = 10f;
+    private float maxDist = 5f;
 
 
     // Runs at the First Frame
     private void Start()
     {
-        init = Agent.transform;
+        initPos = Agent.transform.position;
 
         //Check for target in range
         StartCoroutine(FindTarget());
@@ -29,41 +28,45 @@ public class Enemies : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if in range
-        if(isTargetInRange) {
-            StopCoroutine(FindTarget());
-            MoveAgent();
-        }
+        MoveAgent();
 
-        if(Agent.velocity != Vector3.zero)
+        if (Agent.velocity != Vector3.zero)
             anim.SetBool("IsMoving", true);
         else
             anim.SetBool("IsMoving", false);
     }
 
     private void MoveAgent() {
-        Agent.destination = target.position;
-        if(Agent.speed > AgentMaxSpeed) {
-            Agent.speed = AgentMaxSpeed;
+
+        if(isTargetInRange) {
+            Agent.destination = target.position;
+
+            //StopCoroutine(FindTarget());
         }
-        else {
-            Agent.velocity += Vector3.forward * AgentSpeed;
-        }
+
+        //if agent is too far from init position. send them back
+        /*if((Agent.transform.position - initPos).sqrMagnitude > maxDist) {
+            Agent.destination = initPos;
+
+            //check if enemy has reached initial position
+            if(Agent.transform.position == initPos) {
+                StartCoroutine(FindTarget());
+            }
+        }*/
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if(other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Hit Player");
 
             anim.SetTrigger("Hit");
 
-            //Agent.isStopped = true;
-            //Level_Handler.enemyHit = true;
+            Agent.velocity = Vector3.zero;
 
             //Health component to handle damage dealt to player
-            PlayerHealth H = collision.gameObject.GetComponent<PlayerHealth>();
+            PlayerHealth H = other.gameObject.GetComponent<PlayerHealth>();
 
             if (H == null) return;
 
@@ -80,30 +83,18 @@ public class Enemies : MonoBehaviour
 
         Debug.Log("Searching for Target");
 
-        NavMeshHit navMeshHit;
+        if(Physics.SphereCast(Agent.transform.position, radius, Vector3.forward, out _)) {
+            
+            Debug.Log("Target in radius");
 
-        //if target in within checking distance
-        if ((transform.position - target.position).sqrMagnitude <= distance) {
+            isTargetInRange = true;
 
-            Debug.Log("Target in distance range");
-
-            Agent.Raycast(target.position, out navMeshHit);
-
-            //if hit is successfull
-            if (navMeshHit.hit) {
-                isTargetInRange = true;
-
-                Debug.Log("Target found and locked");
-            } else {
-
-                Debug.Log("Target not found");
-
-                isTargetInRange = false;
-            }
+            Debug.Log("Target found and locked");
 
         } else {
+            Debug.Log("Target not found");
 
-            Debug.Log("Target not in distance range");
+            isTargetInRange = false;
         }
 
     }
